@@ -1,7 +1,4 @@
-from itertools import product
-
 import requests
-from tensorflow.contrib.learn.python.learn.estimators.test_data import get_quantile_based_buckets
 
 
 class MarketData():
@@ -145,7 +142,7 @@ class MarketData():
                     ...
                 ]
         """
-        assert granularity is None or granularity in [60, 300, 900, 3600, 21600, 86400]
+        assert granularity is None or str(granularity) in ["60", "300", "900", "3600", "21600", "86400"]
         params = {}
         if start is not None:
             params['start'] = start
@@ -155,3 +152,45 @@ class MarketData():
             params['granularity'] = granularity
         return self._get('/products/{}/candles'.format(str(product_id)), params=params)
 
+    def get_24hr_stats(self, product_id):
+        """Get 24hr stats for the product. Volume is in base currency units.
+        Open, high, low are in quote currency units.
+        Args:
+            product_id (str): ID of the product
+        Returns:
+            dict: A dictionary of 24hr stats. Example response::
+                {
+                    "open": "34.19000000",
+                    "high": "95.70000000",
+                    "low": "7.06000000",
+                    "volume": "2.41000000"
+                }
+        """
+        return self._get('/products/{}/stats/'.format(str(product_id)))
+
+    def get_currencies(self):
+        """List known currencies
+        Returns:
+            list: A list of known currencies. Example response::
+                [{
+                    "id": "BTC",
+                    "name": "Bitcoin",
+                    "min_size": "0.00000001"
+                }, {
+                    "id": "USD",
+                    "name": "United States Dollar",
+                    "min_size": "0.01000000"
+                }]
+        """
+        return self._get('/currencies')
+
+    def time(self):
+        """Get the API server time.
+        Returns:
+            dict: Information on API server time. Example response::
+                {
+                    "iso": "2015-01-07T23:47:25.201Z",
+                    "epoch": 1420674445.201
+                }
+        """
+        return self._get('/time')
