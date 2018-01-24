@@ -5,8 +5,26 @@ from gdax.coinbase_exchange_auth import CoinbaseExchangeAuth
 
 
 class PrivateClient():
+    """Authenticated client for accessing GDAX accounts. requires passphrase,
+    key, and b64secret key to access your accounts.
+    """
 
-    def __init__(self, key, b64secret, passphrase, api_url="https://api.gdax.com", timeout=30):
+    # List of products offered as of 1/23/2018.
+    BTC_USD = "BTC-USD"
+    BCH_BTC = "BCH-BTC"
+    BCH_USD = "BCH-USD"
+    BTC_EUR = "BTC-EUR"
+    BTC_GBP = "BTC-GBP"
+    BTC_USD = "BTC-USD"
+    ETH_BTC = "ETH-BTC"
+    ETH_EUR = "ETH-EUR"
+    ETH_USD = "ETH-USD"
+    LTC_BTC = "LTC-BTC"
+    LTC_EUR = "LTC-EUR"
+    LTC_USD = "LTC-USD"
+
+    def __init__(self, key, b64secret, passphrase,
+                 api_url="https://api.gdax.com", timeout=30):
         self.url = api_url.rstrip('/')
         self.timeout = timeout
         self.auth = CoinbaseExchangeAuth(key, b64secret, passphrase)
@@ -114,7 +132,7 @@ class PrivateClient():
 
     def _order(self, **kwargs):
         """You can place different orders: limit, market, and stop. Orders can
-        only be placed if your account ha sufficient funds. Once an order is
+        only be placed if your account has sufficient funds. Once an order is
         placed, your account funds will be put on hold for the duration of the
         order. How much and which funds are put on hold depends on the order
         type and parameters specified.
@@ -359,5 +377,93 @@ class PrivateClient():
         if product_id is not None:
             url += "?product_id={}&".format(str(product_id))
         r = requests.delete(url, auth=self.auth, timeout=self.timeout)
+        return r.json()
+
+    def list_orders(self, product_id=None, status=[]):
+        """List your current open orders. Only open or un-settled orders are
+        returned. As soon as an order is no longer open and settled, it will no
+        longer appear in the default request.
+        Args:
+            status (Optional[list]): Limit list of orders to these statuses
+                [open, pending, active]. Passing all returns orders of all
+                statuses.
+            product_id (Optional[str]): Only list orders for a specific product
+        Returns:
+            list: Information about all your current open orders. Example
+                response::
+                [
+                    {
+                        "id": "d0c5340b-6d6c-49d9-b567-48c4bfca13d2",
+                        "price": "0.10000000",
+                        "size": "0.01000000",
+                        "product_id": "BTC-USD",
+                        "side": "buy",
+                        "stp": "dc",
+                        "type": "limit",
+                        "time_in_force": "GTC",
+                        "post_only": false,
+                        "created_at": "2016-12-08T20:02:28.53864Z",
+                        "fill_fees": "0.0000000000000000",
+                        "filled_size": "0.00000000",
+                        "executed_value": "0.0000000000000000",
+                        "status": "open",
+                        "settled": false
+                    }, {
+                        "id": "8b99b139-58f2-4ab2-8e7a-c11c846e3022",
+                        "price": "1.00000000",
+                        "size": "1.00000000",
+                        "product_id": "BTC-USD",
+                        "side": "buy",
+                        "stp": "dc",
+                        "type": "limit",
+                        "time_in_force": "GTC",
+                        "post_only": false,
+                        "created_at": "2016-12-08T20:01:19.038644Z",
+                        "fill_fees": "0.0000000000000000",
+                        "filled_size": "0.00000000",
+                        "executed_value": "0.0000000000000000",
+                        "status": "open",
+                        "settled": false
+                    }
+                ]
+        """
+        url = self.url + "/orders"
+        params = {}
+        if product_id is not None:
+            params["product_id"] = product_id
+        if status:
+            params["status"] = status
+        # TODO: paginate
+        r = requests.get(url, auth=self.auth, params, timeout=self.timeout)
+        return r.json()
+
+    def get_order(self, order_id):
+        """Get a single order by order ID.
+        Args:
+            order_id (str): ID of your order
+        Returns:
+            dict: Information about the order. Example response::
+                {
+                    "id": "68e6a28f-ae28-4788-8d4f-5ab4e5e5ae08",
+                    "size": "1.00000000",
+                    "product_id": "BTC-USD",
+                    "side": "buy",
+                    "stp": "dc",
+                    "funds": "9.9750623400000000",
+                    "specified_funds": "10.0000000000000000",
+                    "type": "market",
+                    "post_only": false,
+                    "created_at": "2016-12-08T20:09:05.508883Z",
+                    "done_at": "2016-12-08T20:09:05.527Z",
+                    "done_reason": "filled",
+                    "fill_fees": "0.0249376391550000",
+                    "filled_size": "0.01291771",
+                    "executed_value": "9.9750556620000000",
+                    "status": "done",
+                    "settled": true
+                }
+        """
+        r = requests.get(self.url + '/orders/' + order_id, auth=self.auth,
+                         timeout=self.timeout)
         return r.json()
 

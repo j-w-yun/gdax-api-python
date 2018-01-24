@@ -30,3 +30,18 @@ output = client.get_holds(account_id)
 print("get_holds()")
 print(output, "\n")
 
+output = client.market_buy(client.BTC_USD, 10)
+print("market_buy()")
+print(output, "\n")
+
+output = client.market_sell(client.BTC_USD, 10)
+print("market_sell()")
+print(output, "\n")
+
+output = client.limit_buy(client.BTC_USD, 10000, 10)
+print("limit_buy()")
+print(output, "\n")
+
+output = client.cancel_all()
+print("cancel_all()")
+print(output, "\n")
