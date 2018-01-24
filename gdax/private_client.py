@@ -1,12 +1,5 @@
-from _socket import timeout
-import base64
-import hashlib
-import hmac
 import json
-import time
-
 import requests
-from requests.auth import AuthBase
 
 from gdax.coinbase_exchange_auth import CoinbaseExchangeAuth
 
@@ -116,5 +109,255 @@ class PrivateClient():
         r = requests.get(self.url +
                          '/accounts/{}/holds'.format(str(account_id)),
                          auth=self.auth, timeout=self.timeout)
+        # TODO: pagination
+        return r.json()
+
+    def _order(self, **kwargs):
+        """You can place different orders: limit, market, and stop. Orders can
+        only be placed if your account ha sufficient funds. Once an order is
+        placed, your account funds will be put on hold for the duration of the
+        order. How much and which funds are put on hold depends on the order
+        type and parameters specified.
+        
+        """
+        return requests.post(self.url + '/orders', data=json.dumps(kwargs),
+                          auth=self.auth, timeout=self.timeout)
+
+    def limit_buy(self, product_id, price, size, client_oid=None, stp=None,
+                  time_in_force="GTC", cancel_after=None, post_only=None):
+        """Place a limit buy order.
+        Args:
+            product_id (str): ID of the product
+            price (str): price in base currency
+            size (str): Amount of product to order
+            client_oid (Optional[str]): Order ID selected by you to identify
+                your order
+            stp (Optional[str]): Self-trade=prevention flag
+            time_in_force (Optional[str]): GTC, GTT, IOC, or FOk (default is
+                GTC)
+            cancel_after (Optional[str]): min, hour, day. Requires
+                time_in_force to be GTT
+            post_only (Optional[str]): Post only flag. Invalid when
+                time_in_force is IOC or FOK
+        Returns:
+            dict: Limit buy result
+        """
+        param = {}
+        param["side"] = "buy"
+        param["type"] = "limit"
+        param["product_id"] = product_id
+        param["price"] = price
+        param["size"] = size
+        param["time_in_force"] = time_in_force
+
+        if client_oid is not None:
+            param["client_oid"] = client_oid
+        if stp is not None:
+            param["stp"] = stp
+        if cancel_after is not None:
+            param["cancel_after"] = cancel_after
+        if post_only is not None:
+            param["post_only"] = post_only
+
+        r = self._order(param)
+        return r.json()
+
+    def limit_sell(self, product_id, price, size, client_oid=None, stp=None,
+                   time_in_force="GTC", cancel_after=None, post_only=None):
+        """Place a limit sell order.
+        Args:
+            product_id (str): ID of the product
+            price (str): price in base currency
+            size (str): Amount of product to order
+            client_oid (Optional[str]): Order ID selected by you to identify
+                your order
+            stp (Optional[str]): Self-trade=prevention flag
+            time_in_force (Optional[str]): GTC, GTT, IOC, or FOk (default is
+                GTC)
+            cancel_after (Optional[str]): min, hour, day. Requires
+                time_in_force to be GTT
+            post_only (Optional[str]): Post only flag. Invalid when
+                time_in_force is IOC or FOK
+        Returns:
+            dict: Limit sell result
+        """
+        param = {}
+        param["side"] = "sell"
+        param["type"] = "limit"
+        param["product_id"] = product_id
+        param["price"] = price
+        param["size"] = size
+        param["time_in_force"] = time_in_force
+
+        if client_oid is not None:
+            param["client_oid"] = client_oid
+        if stp is not None:
+            param["stp"] = stp
+        if cancel_after is not None:
+            param["cancel_after"] = cancel_after
+        if post_only is not None:
+            param["post_only"] = post_only
+
+        r = self._order(param)
+        return r.json()
+
+    def market_buy(self, product_id, size=None, funds=None, client_oid=None,
+                   stp=None):
+        """Place a market buy order.
+        Args:
+            product_id (str): ID of the product
+            size (str): Desired amount in BTC. Funds does not need to be
+                specified if size is specified
+            funds (str): Desired amout of quote currency to use. Size does not
+                need to be specified if funds is specified
+            client_oid (Optional[str]): Order ID selected by you to identify
+                your order
+            stp (Optional[str]): Self-trade=prevention flag
+        Returns:
+            dict: Market buy result
+        """
+        param = {}
+        param["side"] = "buy"
+        param["type"] = "market"
+        param["product_id"] = product_id
+
+        if size is not None:
+            param["size"] = size
+        else:
+            assert funds is not None
+            param["funds"] = funds
+
+        if client_oid is not None:
+            param["client_oid"] = client_oid
+        if stp is not None:
+            param["stp"] = stp
+
+        r = self._order(param)
+        return r.json()
+
+    def market_sell(self, product_id, size=None, funds=None, client_oid=None,
+                    stp=None):
+        """Place a market sell order.
+        Args:
+            product_id (str): ID of the product
+            size (str): Desired amount in BTC. Funds does not need to be
+                specified if size is specified
+            funds (str): Desired amout of quote currency to use. Size does not
+                need to be specified if funds is specified
+            client_oid (Optional[str]): Order ID selected by you to identify
+                your order
+            stp (Optional[str]): Self-trade=prevention flag
+        Returns:
+            dict: Market sell result
+        """
+        param = {}
+        param["side"] = "sell"
+        param["type"] = "market"
+        param["product_id"] = product_id
+
+        if size is not None:
+            param["size"] = size
+        else:
+            assert funds is not None
+            param["funds"] = funds
+
+        if client_oid is not None:
+            param["client_oid"] = client_oid
+        if stp is not None:
+            param["stp"] = stp
+
+        r = self._order(param)
+        return r.json()
+
+    def stop_buy(self, product_id, price, size=None, funds=None,
+                 client_oid=None, stp=None):
+        """Place a stop buy order.
+        Args:
+            product_id (str): ID of the product
+            price (str): Desired price at which the stop order triggers
+            size (str): Desired amount in BTC. Funds does not need to be
+                specified if size is specified
+            funds (str): Desired amout of quote currency to use. Size does not
+                need to be specified if funds is specified
+            client_oid (Optional[str]): Order ID selected by you to identify
+                your order
+            stp (Optional[str]): Self-trade=prevention flag
+        """
+        param = {}
+        param["side"] = "buy"
+        param["type"] = "stop"
+        param["product_id"] = product_id
+        param["price"] = price
+
+        if size is not None:
+            param["size"] = size
+        else:
+            assert funds is not None
+            param["funds"] = funds
+
+        if client_oid is not None:
+            param["client_oid"] = client_oid
+        if stp is not None:
+            param["stp"] = stp
+
+        r = self._order(param)
+        return r.json()
+
+    def stop_sell(self, product_id, price, size=None, funds=None,
+                  client_oid=None, stp=None):
+        """Place a stop sell order.
+        Args:
+            product_id (str): ID of the product
+            price (str): Desired price at which the stop order triggers
+            size (str): Desired amount in BTC. Funds does not need to be
+                specified if size is specified
+            funds (str): Desired amout of quote currency to use. Size does not
+                need to be specified if funds is specified
+            client_oid (Optional[str]): Order ID selected by you to identify
+                your order
+            stp (Optional[str]): Self-trade=prevention flag
+        """
+        param = {}
+        param["side"] = "sell"
+        param["type"] = "stop"
+        param["product_id"] = product_id
+        param["price"] = price
+
+        if size is not None:
+            param["size"] = size
+        else:
+            assert funds is not None
+            param["funds"] = funds
+
+        if client_oid is not None:
+            param["client_oid"] = client_oid
+        if stp is not None:
+            param["stp"] = stp
+
+        r = self._order(param)
+        return r.json()
+
+    def cancel_order(self, order_id):
+        """Cancel a previously placed order.
+        Args:
+            order_id (str): ID of the order previously placed
+        """
+        r = requests.delete(self.url + '/orders/' + order_id, auth=self.auth,
+                            timeout=self.timeout)
+        return r.json()
+
+    def cancel_all(self, product_id=None):
+        """With best effort, cancel all open orders. The response is a list of
+        ids of the canceled orders.
+        Args:
+            product_id (Optional[str]): Only cancel orders open for a specific
+                product
+        Returns:
+            list: A list of ids of the canceled orders
+        """
+        url = self.url + '/orders/'
+        if product_id is not None:
+            url += "?product_id={}&".format(str(product_id))
+        r = requests.delete(url, auth=self.auth, timeout=self.timeout)
         return r.json()
 

@@ -4,7 +4,8 @@ KEY = ""
 B64SECRET = ""
 PASSPHRASE = ""
 
-client = gdax.PrivateClient(KEY, B64SECRET, PASSPHRASE)
+client = gdax.PrivateClient(KEY, B64SECRET, PASSPHRASE,
+                            api_url="https://public.sandbox.gdax.com")
 
 output = client.list_accounts()
 print("list_accounts()")
@@ -13,7 +14,7 @@ print(output, "\n")
 # get ID for ETH account
 account_id = None
 for elem in output:
-    if elem['currency'] == 'ETH':
+    if elem['currency'] == 'BTC':
         account_id = elem['id']
         break
 
