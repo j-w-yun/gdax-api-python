@@ -12,9 +12,9 @@ More information about GDAX API can be found at
 
 ## Public Client
 
-To access public client, create a MarketDataClient
+To access the public client, create a PublicClient
 
-    client = gdax.MarketDataClient()
+    client = gdax.PublicClient()
 
 Get product order book
 
@@ -70,7 +70,8 @@ Limit sell
 
     client.limit_sell(client.ETH_USD, price=3000, size=1)
 
-_caution_ : limit buy and limit sell will not be rejected under any circumstance if post_only="True" (default) is set to "False"
+__Caution__ : Even when an order is posted above or below mid-market price, limit buy or limit sell, respectively, will not be rejected if post_only="True" (default) is set to "False"
+
 
 
 Market buy

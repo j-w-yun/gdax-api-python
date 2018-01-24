@@ -1,27 +1,15 @@
 import json
+
 import requests
 
 from gdax.coinbase_exchange_auth import CoinbaseExchangeAuth
+from gdax.public_client import PublicClient
 
 
-class PrivateClient():
+class PrivateClient(PublicClient):
     """Authenticated client for accessing GDAX accounts. requires passphrase,
     key, and b64secret key to access your accounts.
     """
-
-    # List of products offered as of 1/23/2018.
-    BTC_USD = "BTC-USD"
-    BCH_BTC = "BCH-BTC"
-    BCH_USD = "BCH-USD"
-    BTC_EUR = "BTC-EUR"
-    BTC_GBP = "BTC-GBP"
-    BTC_USD = "BTC-USD"
-    ETH_BTC = "ETH-BTC"
-    ETH_EUR = "ETH-EUR"
-    ETH_USD = "ETH-USD"
-    LTC_BTC = "LTC-BTC"
-    LTC_EUR = "LTC-EUR"
-    LTC_USD = "LTC-USD"
 
     def __init__(self, key, b64secret, passphrase,
                  api_url="https://api.gdax.com", timeout=30):

@@ -1,8 +1,8 @@
 import gdax
 
+PASSPHRASE = ""
 KEY = ""
 B64SECRET = ""
-PASSPHRASE = ""
 
 client = gdax.PrivateClient(KEY, B64SECRET, PASSPHRASE)
 
@@ -29,7 +29,7 @@ output = client.get_holds(account_id)
 print("get_holds()")
 print(output, "\n")
 
-output = client.limit_sell(client.ETH_USD, price=1050, size=0.01)
+output = client.limit_sell(client.ETH_USD, price=1020, size=0.01)
 print("limit_sell()")
 print(output, "\n")
 

@@ -1,7 +1,7 @@
 import requests
 
 
-class MarketDataClient():
+class PublicClient():
     """GDAX public client API for market data
     
     The Market Data API is an unauthenticated set of endpoints for retrieving

@@ -1,6 +1,6 @@
 import gdax
 
-client = gdax.MarketDataClient()
+client = gdax.PublicClient()
 
 output = client.get_products()
 print("get_products()")
