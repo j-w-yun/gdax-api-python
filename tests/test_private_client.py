@@ -4,8 +4,7 @@ KEY = ""
 B64SECRET = ""
 PASSPHRASE = ""
 
-client = gdax.PrivateClient(KEY, B64SECRET, PASSPHRASE,
-                            api_url="https://public.sandbox.gdax.com")
+client = gdax.PrivateClient(KEY, B64SECRET, PASSPHRASE)
 
 output = client.list_accounts()
 print("list_accounts()")
@@ -30,18 +29,18 @@ output = client.get_holds(account_id)
 print("get_holds()")
 print(output, "\n")
 
-output = client.market_buy(client.BTC_USD, 10)
-print("market_buy()")
+output = client.limit_sell(client.ETH_USD, price=1050, size=0.01)
+print("limit_sell()")
 print(output, "\n")
 
-output = client.market_sell(client.BTC_USD, 10)
-print("market_sell()")
-print(output, "\n")
-
-output = client.limit_buy(client.BTC_USD, 10000, 10)
-print("limit_buy()")
+output = client.list_orders()
+print("list_orders()")
 print(output, "\n")
 
 output = client.cancel_all()
 print("cancel_all()")
+print(output, "\n")
+
+output = client.list_orders()
+print("list_orders()")
 print(output, "\n")

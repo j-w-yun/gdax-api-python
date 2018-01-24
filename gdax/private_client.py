@@ -142,7 +142,7 @@ class PrivateClient():
                           auth=self.auth, timeout=self.timeout)
 
     def limit_buy(self, product_id, price, size, client_oid=None, stp=None,
-                  time_in_force="GTC", cancel_after=None, post_only=None):
+                  time_in_force="GTC", cancel_after=None, post_only="True"):
         """Place a limit buy order.
         Args:
             product_id (str): ID of the product
@@ -177,11 +177,11 @@ class PrivateClient():
         if post_only is not None:
             param["post_only"] = post_only
 
-        r = self._order(param)
+        r = self._order(**param)
         return r.json()
 
     def limit_sell(self, product_id, price, size, client_oid=None, stp=None,
-                   time_in_force="GTC", cancel_after=None, post_only=None):
+                   time_in_force="GTC", cancel_after=None, post_only="True"):
         """Place a limit sell order.
         Args:
             product_id (str): ID of the product
@@ -216,7 +216,7 @@ class PrivateClient():
         if post_only is not None:
             param["post_only"] = post_only
 
-        r = self._order(param)
+        r = self._order(**param)
         return r.json()
 
     def market_buy(self, product_id, size=None, funds=None, client_oid=None,
@@ -250,7 +250,7 @@ class PrivateClient():
         if stp is not None:
             param["stp"] = stp
 
-        r = self._order(param)
+        r = self._order(**param)
         return r.json()
 
     def market_sell(self, product_id, size=None, funds=None, client_oid=None,
@@ -284,7 +284,7 @@ class PrivateClient():
         if stp is not None:
             param["stp"] = stp
 
-        r = self._order(param)
+        r = self._order(**param)
         return r.json()
 
     def stop_buy(self, product_id, price, size=None, funds=None,
@@ -318,7 +318,7 @@ class PrivateClient():
         if stp is not None:
             param["stp"] = stp
 
-        r = self._order(param)
+        r = self._order(**param)
         return r.json()
 
     def stop_sell(self, product_id, price, size=None, funds=None,
@@ -352,7 +352,7 @@ class PrivateClient():
         if stp is not None:
             param["stp"] = stp
 
-        r = self._order(param)
+        r = self._order(**param)
         return r.json()
 
     def cancel_order(self, order_id):
@@ -434,7 +434,7 @@ class PrivateClient():
         if status:
             params["status"] = status
         # TODO: paginate
-        r = requests.get(url, auth=self.auth, params, timeout=self.timeout)
+        r = requests.get(url, auth=self.auth, params=params, timeout=self.timeout)
         return r.json()
 
     def get_order(self, order_id):
