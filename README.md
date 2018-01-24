@@ -1,6 +1,9 @@
 # gdax-api-python
 
-dependencies:
+More information about GDAX API can be found at
 
-    $ pipenv install requests
+    https://docs.gdax.com/?python#introduction
 
+# Dependencies:
+
+    $ pip install requests

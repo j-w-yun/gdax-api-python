@@ -1,7 +1,7 @@
 import requests
 
 
-class MarketData():
+class MarketDataClient():
     """GDAX public client API for market data
     
     The Market Data API is an unauthenticated set of endpoints for retrieving
@@ -44,7 +44,8 @@ class MarketData():
     def get_products(self):
         """Get a list of available currency pairs for trading.
         Returns:
-            list: A list of available currency pairs for trading. Example response::
+            list: A list of available currency pairs for trading. Example
+                response::
                 [
                     {
                         "id": "BTC-USD",
@@ -81,7 +82,8 @@ class MarketData():
                 }
         """
         assert level in range(1, 4)
-        return self._get('/products/{}/book'.format(str(product_id)), params={'level': level})
+        return self._get('/products/{}/book'.format(str(product_id)),
+                         params={'level': level})
 
     def get_product_ticker(self, product_id):
         """Snapshot information about the last trade (tick), best bid/ask and
@@ -125,7 +127,8 @@ class MarketData():
         """
         return self._get('/products/{}/trades'.format(str(product_id)))
 
-    def get_historic_rates(self, product_id, start=None, end=None, granularity=None):
+    def get_historic_rates(self, product_id, start=None, end=None,
+                           granularity=None):
         """Historic rates for a product. Rates are returned in grouped buckets
         based on requested granularity.
         Args:
@@ -142,7 +145,9 @@ class MarketData():
                     ...
                 ]
         """
-        assert granularity is None or str(granularity) in ["60", "300", "900", "3600", "21600", "86400"]
+        assert granularity is None or str(granularity) in ["60", "300", "900",
+                                                           "3600", "21600",
+                                                           "86400"]
         params = {}
         if start is not None:
             params['start'] = start
@@ -150,7 +155,8 @@ class MarketData():
             params['end'] = end
         if granularity is not None:
             params['granularity'] = granularity
-        return self._get('/products/{}/candles'.format(str(product_id)), params=params)
+        return self._get('/products/{}/candles'.format(str(product_id)),
+                         params=params)
 
     def get_24hr_stats(self, product_id):
         """Get 24hr stats for the product. Volume is in base currency units.
