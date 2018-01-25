@@ -4,19 +4,19 @@ More information can be found at:
 
     https://docs.gdax.com/
 
-# Dependencies
+## Dependencies
 
-If you are installing with native pip, skip this step.
+If you are installing gdax-api with native pip, skip this step.
 
     $ pip install requests
 
-# Install
+## Install
 
-## Installing with native pip
+#### Installing with native pip
 
-    pip install gdax-api
+    $ pip install gdax-api
 
-## Validate your installation
+#### Validate your installation
 
 Start a terminal.
 
@@ -32,9 +32,9 @@ Enter the following short program inside the python interactive shell:
 
 If the system outputs a JSON response from GDAX, then you are ready to begin using gdax-api in your programs.
 
-# Usage
+## Usage
 
-## Public Client
+#### Public Client
 
 To access the public client, create a PublicClient
 
@@ -64,7 +64,7 @@ Get API time
 
     client.time()
 
-## Authenticated Client
+#### Authenticated Client
 
 To access your authenticated client, create a PrivateClient
 
@@ -126,10 +126,10 @@ Get an order
 
     client.get_order(order_id)
 
-# Donations
+## Donations
 
 ETH: `0x1111111113dfd50282276F1D165E0F4f35Dd6Fd5`
 
-# License
+## License
 
 MIT. See LICENSE for details.
