@@ -1,12 +1,36 @@
 # gdax-api-python
 
-More information about GDAX API can be found at
+More information can be found at:
 
-    https://docs.gdax.com/?python#introduction
+    https://docs.gdax.com/
 
 # Dependencies
 
+If you are installing with native pip, skip this step.
+
     $ pip install requests
+
+# Install
+
+## Installing with native pip
+
+    pip install gdax-api
+
+## Validate your installation
+
+Start a terminal.
+
+Invoke python from your shell as follows:
+
+    $ python
+
+Enter the following short program inside the python interactive shell:
+
+    >>> import gdax
+    >>> client = gdax.PublicClient()
+    >>> print(client.get_currencies())
+
+If the system outputs a JSON response from GDAX, then you are ready to begin using gdax-api in your programs.
 
 # Usage
 
@@ -69,10 +93,6 @@ Limit buy
 Limit sell
 
     client.limit_sell(client.ETH_USD, price=3000, size=1)
-
-__Caution__ : Even when an order is posted above or below mid-market price, limit buy or limit sell, respectively, will not be rejected if post_only="True" (default) is set to "False"
-
-
 
 Market buy
 
