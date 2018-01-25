@@ -126,3 +126,10 @@ Get an order
 
     client.get_order(order_id)
 
+# Donations
+
+ETH: `0x1111111113dfd50282276F1D165E0F4f35Dd6Fd5`
+
+# License
+
+MIT. See LICENSE for details.
