@@ -1,17 +1,18 @@
 import requests
 
 
-class PublicClient():
+class PublicClient(object):
     """GDAX public client API for market data
     
     The Market Data API is an unauthenticated set of endpoints for retrieving
     market data. These endpoints provide snapshots of market data.
     """
 
-    # List of products offered as of 1/23/2018.
+    # List of products offered as of 1/31/2018.
     BTC_USD = "BTC-USD"
     BCH_BTC = "BCH-BTC"
     BCH_USD = "BCH-USD"
+    BCH_EUR = "BCH-EUR"
     BTC_EUR = "BTC-EUR"
     BTC_GBP = "BTC-GBP"
     BTC_USD = "BTC-USD"

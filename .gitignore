@@ -14,3 +14,4 @@ gdax_api.egg-info/PKG-INFO
 gdax_api.egg-info/requires.txt
 gdax_api.egg-info/SOURCES.txt
 gdax_api.egg-info/top_level.txt
+*.pyc

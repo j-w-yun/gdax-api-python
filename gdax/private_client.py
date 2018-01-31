@@ -454,4 +454,3 @@ class PrivateClient(PublicClient):
         r = requests.get(self.url + '/orders/' + order_id, auth=self.auth,
                          timeout=self.timeout)
         return r.json()
-
