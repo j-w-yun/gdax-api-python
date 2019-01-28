@@ -1,3 +1,10 @@
+# IMPORTANT
+
+As of December 31, 2018, GDAX API is no longer supported by Coinbase. Instead, please refer to https://docs.pro.coinbase.com/
+
+As of yet, gdax-api does not support the new Coinbase API. Please refrain from using any code in this repository to transact on Coinbase until further notice.
+
+
 # gdax-api-python
 
 More information can be found at:
@@ -125,10 +132,6 @@ List orders
 Get an order
 
     client.get_order(order_id)
-
-## Donations
-
-ETH: `0x1111111113dfd50282276F1D165E0F4f35Dd6Fd5`
 
 ## License
 
